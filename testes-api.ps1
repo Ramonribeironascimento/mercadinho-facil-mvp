@@ -1,4 +1,7 @@
-# Testes da API. Rode com o sistema ligado (localhost:8080).
+# Testes automatizados da API do Mercadinho Fácil:
+# 1. Verifica o registro de uma venda válida.
+# 2. Verifica se a API bloqueia vendas sem estoque suficiente.
+# 3. Verifica se a API rejeita quantidades iguais a zero.# Testes da API. Rode com o sistema ligado (localhost:8080).
 $base = "http://localhost:8080"
 function Post($url, $corpo) {
   try { Invoke-RestMethod -Method Post -Uri "$base$url" -Body $corpo -ContentType "application/x-www-form-urlencoded" }
