@@ -1,0 +1,30 @@
+
+name: CI - Mercadinho Facil
+
+on:
+  push:
+    branches: [main, documentacao-mvp]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Compilar projeto
+        run: |
+          javac -encoding UTF-8 -d out src/main/java/br/com/mercadinhafacil/Main.java
+
+      - name: Verificar compilacao
+        run: |
+          test -f out/br/com/mercadinhafacil/Main.class
