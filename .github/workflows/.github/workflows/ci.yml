@@ -1,0 +1,43 @@
+
+name: CI - Mercadinho Facil
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Compilar projeto
+        run: |
+          javac -encoding UTF-8 -d out src/main/java/br/com/mercadinhofacil/Main.java
+
+      - name: Iniciar servidor e testar API
+        run: |
+          java -cp out br.com.mercadinhofacil.Main > servidor.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8080/api/resumo > /dev/null; then
+              break
+            fi
+            sleep 2
+          done
+
+          curl -fsS http://localhost:8080/api/resumo
+
+          pwsh -File ./testes-api.ps1
