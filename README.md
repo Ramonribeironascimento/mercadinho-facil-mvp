@@ -48,6 +48,15 @@ Os dados são armazenados na pasta `dados/`, criada automaticamente.
 ## Limitações do MVP
 
 O projeto ainda não possui login nem banco de dados. Essas funcionalidades podem ser implementadas em versões futuras.
+## Testes da API
+
+O projeto possui um script de testes que verifica três cenários:
+
+- Registro de uma venda válida.
+- Bloqueio de venda quando o estoque é insuficiente.
+- Rejeição de venda com quantidade igual a zero.
+
+Esses testes ajudam a validar as principais regras de funcionamento do sistema.
 
 ## Autor
 
