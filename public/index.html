@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mercadinho Fácil</title>
+<style>
+:root{--navy:#0b2545;--green:#1f9d62;--btn:#177a4c;--bg:#f4f6f9;--line:#dde3ec;--mut:#5b6778;--ok:#14673f}
+*{box-sizing:border-box}
+body{margin:0;display:flex;min-height:100vh;background:var(--bg);color:#1b2430;font:15px/1.45 "Segoe UI",system-ui,Arial,sans-serif}
+.i{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+nav{width:232px;flex-shrink:0;background:var(--navy);padding:18px 0;display:flex;flex-direction:column}
+.marca{display:flex;align-items:center;gap:10px;margin:0 16px 20px;color:#fff;font-size:17px;font-weight:600;line-height:1.2}
+.logo{width:32px;height:32px;border-radius:8px;background:var(--green);display:grid;place-items:center}
+nav button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:10px 16px 10px 19px;border:0;border-left:3px solid transparent;background:none;color:#b8c5da;font:inherit;text-align:left;cursor:pointer}
+nav button[aria-current=page]{background:#16376a;border-left-color:var(--green);color:#fff;padding-left:16px}
+.rodape{margin-top:auto;padding:14px 16px 0;border-top:1px solid #1e3f73;font-size:12px;color:#8fa3c2}
+main{flex:1;min-width:0;max-width:1000px;padding:26px 30px}
+h2{margin:0;font-size:24px;font-weight:600;color:var(--navy)}
+h3{margin:22px 0 10px;font-size:16px;font-weight:600;color:var(--navy)}
+.sub{margin:3px 0 18px;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card,.panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px}
+.card .t{display:flex;justify-content:space-between;align-items:center;color:var(--mut);font-size:13px}
+.card b{display:block;margin-top:6px;font-size:30px;font-weight:600;color:var(--navy)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:8px;border:1px solid #b9c4d4;background:#fff;color:var(--navy);font:inherit;cursor:pointer;white-space:nowrap}
+.btn.azul{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.verde{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn:disabled{opacity:.6;cursor:wait}
+.campos{display:grid;gap:12px;align-items:end}
+.g5{grid-template-columns:1.6fr 1fr .7fr 1fr auto}
+.g4{grid-template-columns:2fr 1fr 1fr auto}
+label{display:block;margin-bottom:4px;font-size:13px;color:var(--mut)}
+input{width:100%;min-height:44px;padding:0 12px;border:1px solid #9aa8bb;border-radius:8px;background:#fff;color:#1b2430;font:inherit}
+input[readonly]{background:var(--bg);border-color:#c5cfdd;color:var(--navy)}
+.busca{position:relative}.busca svg{position:absolute;left:12px;top:13px;color:var(--mut)}.busca input{padding-left:38px}
+#res{position:absolute;z-index:5;left:0;right:0;top:100%;max-height:230px;overflow:auto;margin-top:4px;background:#fff;border:1px solid #9aa8bb;border-radius:8px}
+.opt{display:flex;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:8px 12px;border:0;border-bottom:1px solid #edf0f5;background:#fff;font:inherit;text-align:left;cursor:pointer}
+.opt span{color:var(--mut);font-size:13px}.opt:hover{background:var(--bg)}.vazio{padding:12px;color:var(--mut)}
+.tab{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:10px}
+.tab>h3{margin:0;padding:12px 16px;border-bottom:1px solid #e6ebf2}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 16px;text-align:left;border-bottom:1px solid #edf0f5}
+th{background:#eef2f7;color:var(--mut);font-weight:600;font-size:13px}
+tbody tr:last-child td{border-bottom:0}.dir{text-align:right}
+.total{display:flex;justify-content:flex-end;align-items:baseline;gap:12px;padding:10px 16px;background:var(--bg);border-top:1px solid #e6ebf2}
+.total b{font-size:22px;color:var(--navy)}
+.link{border:0;background:none;color:#a01919;font:inherit;text-decoration:underline;cursor:pointer;min-height:32px}
+.ok{color:var(--ok);font-weight:600}.warn{color:#8a5a00;font-weight:600}
+.msg{min-height:22px;margin-top:10px;font-weight:600}.msg.erro{color:#a01919}.msg.sucesso{color:var(--ok)}
+.acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.sucesso-box{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid #a9d9bf;border-radius:10px;background:#eaf6ef;color:var(--ok);font-size:19px;font-weight:600}
+.sucesso-box i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff}
+.duas{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin:14px 0}
+.duas .painel{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.duas h3{display:flex;justify-content:space-between;align-items:center;margin:0;padding:12px 16px;border-bottom:1px solid #e6ebf2}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:20px;background:#eaf6ef;color:var(--ok);font-size:12px;font-weight:400}
+dl{margin:0}dl div{display:flex;justify-content:space-between;gap:12px;padding:8px 16px;border-bottom:1px solid #edf0f5}
+dt{color:var(--mut)}dd{margin:0;text-align:right}
+dl .dest{background:#eaf6ef;border-left:4px solid var(--green);color:var(--ok);font-weight:600}dl .dest dd{font-size:18px}
+dl .sep{background:var(--bg);font-weight:600;color:var(--navy)}
+:focus-visible{outline:3px solid #2f6fdb;outline-offset:2px}
+@media(max-width:760px){body{flex-direction:column}nav{width:auto;padding:10px 0 0}.marca{margin-bottom:8px}.menu{display:flex;overflow-x:auto}nav button{width:auto;white-space:nowrap;border-left:0;border-bottom:3px solid transparent;padding-left:16px}nav button[aria-current=page]{border-bottom-color:var(--green)}.rodape{display:none}main{padding:18px 14px}.g5,.g4{grid-template-columns:1fr 1fr}.g5>:first-child,.g4>:first-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 10h9.8l1.8-7H6.2"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></symbol>
+<symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></symbol>
+<symbol id="i-rec" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+<symbol id="i-wh" viewBox="0 0 24 24"><path d="M3 21V9l9-5 9 5v12"/><path d="M7 21v-8h10v8M7 17h10"/></symbol>
+<symbol id="i-hist" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+<symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+</svg>
+
+<nav aria-label="Menu principal">
+  <div class="marca"><span class="logo"><svg class="i" style="color:#fff;width:18px;height:18px"><use href="#i-cart"/></svg></span>Mercadinho Fácil</div>
+  <div class="menu">
+    <button data-v="geral"><svg class="i"><use href="#i-dash"/></svg>Visão geral</button>
+    <button data-v="produtos"><svg class="i"><use href="#i-box"/></svg>Produtos</button>
+    <button data-v="vendas"><svg class="i"><use href="#i-rec"/></svg>Vendas</button>
+    <button data-v="estoque"><svg class="i"><use href="#i-wh"/></svg>Estoque</button>
+    <button data-v="historico"><svg class="i"><use href="#i-hist"/></svg>Histórico de vendas</button>
+  </div>
+  <div class="rodape">Mercadinho Nova Opção</div>
+</nav>
+
+<main>
+<section id="v-geral">
+  <h2>Visão geral</h2><p class="sub">Bem-vindo ao Mercadinho Nova Opção</p>
+  <div class="cards">
+    <div class="card"><div class="t">Produtos cadastrados<svg class="i" style="color:var(--navy)"><use href="#i-box"/></svg></div><b id="c-prod">–</b></div>
+    <div class="card"><div class="t">Vendas realizadas<svg class="i" style="color:var(--green)"><use href="#i-ok"/></svg></div><b id="c-vend">–</b></div>
+    <div class="card"><div class="t">Produtos com estoque baixo<svg class="i" style="color:#b7791f"><use href="#i-alert"/></svg></div><b id="c-baixo">–</b></div>
+  </div>
+  <h3>Acesso rápido</h3>
+  <div class="row">
+    <button class="btn azul" data-go="produtos"><svg class="i"><use href="#i-plus"/></svg>Cadastrar produto</button>
+    <button class="btn verde" data-go="vendas"><svg class="i"><use href="#i-cart"/></svg>Registrar venda</button>
+    <button class="btn" data-go="estoque"><svg class="i"><use href="#i-search"/></svg>Consultar estoque</button>
+  </div>
+  <h3>Últimas vendas</h3>
+  <div class="tab"><table><thead><tr><th>Produto</th><th>Quantidade</th><th>Valor</th><th>Data</th></tr></thead><tbody id="t-ult"></tbody></table></div>
+</section>
+
+<section id="v-produtos" hidden>
+  <h2>Produtos</h2><p class="sub">Cadastre novos produtos e consulte os já cadastrados.</p>
+  <form id="f-prod" class="panel">
+    <div class="campos g4">
+      <div><label for="nome">Nome do produto</label><input id="nome" required maxlength="60"></div>
+      <div><label for="preco">Preço (R$)</label><input id="preco" inputmode="decimal" placeholder="0,00" required></div>
+      <div><label for="estoque">Estoque inicial</label><input id="estoque" type="number" min="0" step="1" required></div>
+      <button class="btn verde" type="submit"><svg class="i"><use href="#i-plus"/></svg>Cadastrar produto</button>
+    </div>
+    <div class="msg" id="m-prod" role="status" aria-live="polite"></div>
+  </form>
+  <h3>Produtos cadastrados</h3>
+  <div class="tab"><table><thead><tr><th>Produto</th><th>Preço</th><th>Em estoque</th></tr></thead><tbody id="t-prod"></tbody></table></div>
+</section>
+
+<section id="v-vendas" hidden>
+  <h2>Registrar nova venda</h2><p class="sub">Selecione os produtos e informe as quantidades para registrar a venda.</p>
+  <div class="panel">
+    <div class="busca" id="busca-wrap">
+      <label for="busca">Buscar produto</label>
+      <div style="position:relative"><svg class="i"><use href="#i-search"/></svg><input id="busca" placeholder="Digite o nome do produto" autocomplete="off"></div>
+      <div id="res" hidden></div>
+    </div>
+    <div class="campos g5" style="margin-top:12px">
+      <div><label for="psel">Produto selecionado</label><input id="psel" readonly></div>
+      <div><label for="punit">Preço unitário</label><input id="punit" readonly></div>
+      <div><label for="qtd">Quantidade</label><input id="qtd" type="number" min="1" step="1" value="1"></div>
+      <div><label for="sub">Subtotal</label><input id="sub" readonly></div>
+      <button class="btn verde" id="add" type="button"><svg class="i"><use href="#i-plus"/></svg>Adicionar produto</button>
+    </div>
+  </div>
+  <div class="tab" style="margin-top:14px">
+    <h3>Resumo da venda</h3>
+    <table><thead><tr><th>Produto</th><th>Quantidade</th><th>Valor unitário</th><th class="dir">Subtotal</th><th></th></tr></thead><tbody id="t-car"></tbody></table>
+    <div class="total"><span style="color:var(--mut)">Total da venda</span><b id="total">R$ 0,00</b></div>
+  </div>
+  <div class="msg" id="m-venda" role="alert"></div>
+  <div class="acoes"><button class="btn" id="cancelar" type="button">Cancelar</button><button class="btn azul" id="fin" type="button"><svg class="i"><use href="#i-check"/></svg>Finalizar venda</button></div>
+</section>
+
+<section id="v-resultado" hidden>
+  <h2 style="margin-bottom:14px">Resultado da venda</h2>
+  <div class="sucesso-box" role="status"><i aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></i>Venda registrada com sucesso!</div>
+  <div class="duas">
+    <div class="painel"><h3>Resumo da operação</h3><dl id="r-venda"></dl></div>
+    <div class="painel"><h3>Atualização de estoque <span class="pill"><svg class="i" style="width:14px;height:14px"><use href="#i-ok"/></svg>Atualizado</span></h3><dl id="r-estoque"></dl></div>
+  </div>
+  <div class="acoes"><button class="btn" data-go="geral"><svg class="i"><use href="#i-back"/></svg>Voltar ao menu</button><button class="btn azul" data-go="vendas"><svg class="i"><use href="#i-plus"/></svg>Nova venda</button></div>
+</section>
+
+<section id="v-estoque" hidden>
+  <h2>Estoque</h2><p class="sub">Produtos com 5 unidades ou menos precisam de reposição.</p>
+  <div class="tab"><table><thead><tr><th>Produto</th><th>Quantidade</th><th>Situação</th></tr></thead><tbody id="t-est"></tbody></table></div>
+</section>
+
+<section id="v-historico" hidden>
+  <h2>Histórico de vendas</h2><p class="sub">Vendas registradas, da mais recente para a mais antiga.</p>
+  <div class="tab"><table><thead><tr><th>Nº</th><th>Data</th><th>Produto</th><th>Quantidade</th><th>Valor</th></tr></thead><tbody id="t-hist"></tbody></table></div>
+</section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s), brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ic=n=>`<svg class="i"><use href="#i-${n}"/></svg>`;
+async function api(u,corpo){
+  const r=await fetch(u,corpo?{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(corpo)}:{});
+  const j=await r.json(); if(!r.ok) throw new Error(j.erro); return j;
+}
+let produtos=[], carrinho=[], sel=null;
+
+function show(v){
+  document.querySelectorAll('main section').forEach(s=>s.hidden=s.id!=='v-'+v);
+  const ativo=v==='resultado'?'vendas':v;
+  document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===ativo?'page':'false'));
+  window.scrollTo(0,0);
+}
+const linhas=(l,f,n)=>l.map(f).join('')||`<tr><td colspan="${n}">Nenhum registro ainda.</td></tr>`;
+async function carregar(){
+  const [p,v,r]=await Promise.all([api('/api/produtos'),api('/api/vendas'),api('/api/resumo')]);
+  produtos=p; $('#c-prod').textContent=r.produtos; $('#c-vend').textContent=r.vendas; $('#c-baixo').textContent=r.baixo;
+  $('#t-ult').innerHTML=linhas(v.slice(0,5),x=>`<tr><td>${esc(x.produto)}</td><td>${x.quantidade}</td><td>${brl(x.total)}</td><td>${x.data}</td></tr>`,4);
+  $('#t-hist').innerHTML=linhas(v,x=>`<tr><td>${String(x.numero).padStart(3,'0')}</td><td>${x.data}</td><td>${esc(x.produto)}</td><td>${x.quantidade}</td><td>${brl(x.total)}</td></tr>`,5);
+  $('#t-prod').innerHTML=linhas(p,x=>`<tr><td>${esc(x.nome)}</td><td>${brl(x.preco)}</td><td>${x.estoque}</td></tr>`,3);
+  $('#t-est').innerHTML=linhas(p,x=>`<tr><td>${esc(x.nome)}</td><td>${x.estoque} unidades</td><td>${x.baixo?`<span class="warn">${ic('alert')} Estoque baixo: repor</span>`:`<span class="ok">${ic('check')} Normal</span>`}</td></tr>`,3);
+}
+
+/* ---------- tela de venda ---------- */
+function resultados(){
+  const q=$('#busca').value.toLowerCase(), box=$('#res');
+  const l=produtos.filter(x=>x.estoque>0&&x.nome.toLowerCase().includes(q));
+  box.innerHTML=l.map(x=>`<button type="button" class="opt" data-id="${x.id}">${esc(x.nome)}<span>${brl(x.preco)} · ${x.estoque} em estoque</span></button>`).join('')||'<div class="vazio">Nenhum produto encontrado.</div>';
+  box.hidden=false;
+}
+function escolher(id){
+  sel=produtos.find(x=>x.id===id); $('#psel').value=sel.nome; $('#punit').value=brl(sel.preco);
+  $('#qtd').value=1; $('#busca').value=''; $('#res').hidden=true; subtotal();
+}
+function subtotal(){$('#sub').value=sel?brl(sel.preco*(+$('#qtd').value||0)):'';}
+function erroVenda(t){const m=$('#m-venda');m.className='msg erro';m.textContent=t?'⚠ '+t:'';}
+function adicionar(){
+  const q=Number($('#qtd').value);
+  if(!sel) return erroVenda('Busque e selecione um produto.');
+  if(!Number.isInteger(q)||q<=0) return erroVenda('Informe uma quantidade inteira maior que zero.');
+  const jaTem=(carrinho.find(c=>c.id===sel.id)||{qtd:0}).qtd;
+  if(jaTem+q>sel.estoque) return erroVenda(`Há apenas ${sel.estoque} unidades de ${sel.nome} em estoque.`);
+  const c=carrinho.find(c=>c.id===sel.id);
+  if(c) c.qtd+=q; else carrinho.push({id:sel.id,nome:sel.nome,preco:sel.preco,qtd:q});
+  sel=null; ['#psel','#punit','#sub'].forEach(s=>$(s).value=''); $('#qtd').value=1; erroVenda(''); renderCarrinho();
+}
+function renderCarrinho(){
+  $('#t-car').innerHTML=linhas(carrinho,(c,i)=>`<tr><td>${esc(c.nome)}</td><td>${c.qtd}</td><td>${brl(c.preco)}</td><td class="dir">${brl(c.preco*c.qtd)}</td><td class="dir"><button class="link" data-rm="${i}">Remover</button></td></tr>`,5);
+  $('#total').textContent=brl(carrinho.reduce((t,c)=>t+c.preco*c.qtd,0));
+}
+function limparVenda(){carrinho=[];sel=null;['#psel','#punit','#sub','#busca'].forEach(s=>$(s).value='');$('#qtd').value=1;$('#res').hidden=true;erroVenda('');renderCarrinho();}
+const lin=(k,v,c='')=>`<div class="${c}"><dt>${k}</dt><dd>${v}</dd></div>`;
+function mostrarResultado(v){
+  const um=v.itens.length===1, n=String(v.numero).padStart(3,'0');
+  let a=lin('Número da venda',n)+lin('Data',v.data), b='';
+  v.itens.forEach(it=>{
+    if(um) a+=lin('Produto',esc(it.produto))+lin('Quantidade',it.quantidade+' unidades')+lin('Valor unitário',brl(it.unitario));
+    else a+=lin(esc(it.produto),`${it.quantidade} un. × ${brl(it.unitario)} = ${brl(it.subtotal)}`);
+    if(!um) b+=lin(esc(it.produto),'','sep');
+    else b+=lin('Produto',esc(it.produto));
+    b+=lin('Estoque anterior',it.estoqueAnterior+' unidades')+lin('Quantidade vendida',it.quantidade+' unidades')+lin('Estoque atual',it.estoqueAtual+' unidades','dest');
+  });
+  $('#r-venda').innerHTML=a+lin('Total da venda',brl(v.total),'dest'); $('#r-estoque').innerHTML=b; show('resultado');
+}
+
+/* ---------- eventos ---------- */
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{show(b.dataset.v);carregar();});
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{show(b.dataset.go);carregar();});
+$('#busca').oninput=resultados; $('#busca').onfocus=resultados;
+$('#res').onclick=e=>{const b=e.target.closest('.opt'); if(b) escolher(+b.dataset.id);};
+document.addEventListener('click',e=>{if(!e.target.closest('#busca-wrap')) $('#res').hidden=true;});
+$('#qtd').oninput=subtotal; $('#add').onclick=adicionar;
+$('#t-car').onclick=e=>{const b=e.target.closest('[data-rm]'); if(b){carrinho.splice(+b.dataset.rm,1);renderCarrinho();}};
+$('#cancelar').onclick=()=>{limparVenda();show('geral');carregar();};
+$('#fin').onclick=async()=>{
+  if(!carrinho.length) return erroVenda('Adicione ao menos um produto à venda.');
+  const b=$('#fin'); b.disabled=true;
+  try{const v=await api('/api/vendas',{itens:carrinho.map(c=>c.id+':'+c.qtd).join(',')});
+    limparVenda(); mostrarResultado(v); carregar();}
+  catch(err){erroVenda(err.message);}
+  finally{b.disabled=false;}
+};
+$('#f-prod').onsubmit=async e=>{
+  e.preventDefault(); const m=$('#m-prod');
+  try{await api('/api/produtos',{nome:$('#nome').value,preco:$('#preco').value,estoque:$('#estoque').value});
+    m.className='msg sucesso';m.textContent='✓ Produto cadastrado com sucesso.';e.target.reset();carregar();}
+  catch(err){m.className='msg erro';m.textContent='⚠ '+err.message;}
+};
+show('geral'); renderCarrinho(); carregar();
+</script>
+</body>
+</html>
