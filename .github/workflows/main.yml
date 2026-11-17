@@ -21,10 +21,23 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Localizar arquivo Java
+        run: |
+          MAIN_FILE=$(find . -type f -name Main.java -not -path './.git/*' | head -n 1)
+          if [ -z "$MAIN_FILE" ]; then
+            echo "ERRO: Main.java nao encontrado"
+            exit 1
+          fi
+          echo "Arquivo encontrado: $MAIN_FILE"
+          echo "$MAIN_FILE" > main_path.txt
+
       - name: Compilar projeto
         run: |
-          javac -encoding UTF-8 -d out src/main/java/br/com/mercadinhafacil/Main.java
+          mkdir -p out
+          MAIN_FILE=$(cat main_path.txt)
+          javac -encoding UTF-8 -d out "$MAIN_FILE"
 
       - name: Verificar compilacao
         run: |
           test -f out/br/com/mercadinhafacil/Main.class
+          echo "Compilacao concluida com sucesso!"
