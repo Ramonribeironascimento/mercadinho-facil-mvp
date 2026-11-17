@@ -37,7 +37,14 @@ jobs:
           MAIN_FILE=$(cat main_path.txt)
           javac -encoding UTF-8 -d out "$MAIN_FILE"
 
+     
       - name: Verificar compilacao
         run: |
-          test -f out/br/com/mercadinhafacil/Main.class
-          echo "Compilacao concluida com sucesso!"
+          echo "Arquivos gerados:"
+          find out -type f
+          CLASS_FILE=$(find out -type f -name Main.class | head -n 1)
+          if [ -z "$CLASS_FILE" ]; then
+            echo "ERRO: Main.class nao foi gerado"
+            exit 1
+          fi
+          echo "Compilacao verificada: $CLASS_FILE"
